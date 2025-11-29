@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Prediction Model</title>
+  <style>
+
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .tab {
+      overflow: hidden;
+      border-bottom: 2px solid #ccc;
+    }
+    .tab button {
+      background-color: #F2D200;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+    .tab button:hover {
+      background-color: #0E2095;
+    }
+    .tab button.active {
+      background-color: #ccc;
+    }
+    .tabcontent {
+      display: none;
+      padding: 16px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+
+    p{
+        font-family:
+        text-align: left;
+      }
+  </style>
+
+</head>
+<body>
+  <h1>My Prediction Model</h1>
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Home')">Home</button>
+    <button class="tablinks" onclick="openTab(event, 'Make_a_Prediction')">Make a Prediction</button>
+    <button class="tablinks" onclick="openTab(event, 'view_data')">Datasets</button>
+  </div>
+
+  <div id="Home" class="tabcontent">
+    <h3>Home</h3>
+    <p>Welcome to the interactive site! Click a tab to see more.</p>
+  </div>
+
+ <div id="view_data" class="tabcontent">
+    <h2>View a Year</h2>
+
+    <form method="POST" action="/view_data">
+        <label for="select-year"><strong>Select Year:</strong></label>
+
+        <!-- Match Flask: name="year" -->
+        <select name="year" id="select-year" onchange="this.form.submit()">
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+        </select>
+        <button type ="submit">View Season</button>
+    </form>
+</div>
+
+
+  <div id="Make_a_Prediction" class="tabcontent">
+    <h3>Make a Prediction</h3>
+      <p> Select year(s) for a prediction of the 2026 season below.</p>
+                <input type="checkbox" id = "2023" name="2023" value="2023">
+                    <label for = "2023">2023</label>
+                <input type = "checkbox" id = "2024" name="2024" value="2024">
+                    <label for = "2024">2024</label>
+                <input type="checkbox"  id = "2025" name= "2025" value="2025">
+                    <label for = "2025">2025</label>
+
+        <button class = "tablinks" onclick="/Make_a_Prediction" aria-setsize="3"> Predict </button>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
+
+  <script>
+      async function predict() {
+    let years = [];
+
+    ["2023", "2024", "2025"].forEach(y => {
+        if (document.getElementById(y).checked) {
+            years.push(y);
+        }
+    });
+
+    if (years.length === 0) {
+        alert("Please select at least one year.");
+        return;
+    }
+
+    // Send to Flask
+    let response = await fetch("/Make_a_Prediction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ years: years })
+    });
+
+    let data = await response.json();
+
+    // Display result
+    document.getElementById("prediction_result").innerHTML =
+        `<h3>Prediction:</h3><p>${data.result}</p>`;
+}
+
+  </script>
+</body>
+</html>
