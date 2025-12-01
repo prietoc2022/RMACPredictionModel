@@ -4,9 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Prediction Model</title>
+
+  <style>
+      .main-page{
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero-banner {
+    background-color: #0E2095;
+    padding: 50px 20px;
+    text-align: right-center;
+    color: white;
+    border-bottom: 5px solid #0E2095;
+}
+
+.hero-content h1 {
+    font-size: 42px;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+  </style>
   <style>
 
-    body { font-family: Arial, sans-serif; margin: 40px; }
+    body { font-family: Arial, sans-serif; margin: 40px; color:black }
 
     .tab {
       overflow: hidden;
@@ -14,6 +45,7 @@
     }
     .tab button {
       background-color: #F2D200;
+      color:white;
       border: none;
       outline: none;
       cursor: pointer;
@@ -91,12 +123,17 @@
 
 </head>
 <body>
+    <header class="hero-banner">
+        <div class = "hero-content">
+            <h1>My Softball Prediction Model</h1>
+        </div>
+    </header>
 
-  <h1>My Prediction Model</h1>
   <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Home')">Home</button>
     <button class="tablinks" onclick="openTab(event, 'Make_a_Prediction')">Make a Prediction</button>
     <button class="tablinks" onclick="openTab(event, 'view_data')">Datasets</button>
+    <button class ="tablinks" onclick="openTab(event, 'history')">View Historic Rankings</button>
   </div>
 
   <div id="Home" class="tabcontent">
@@ -120,6 +157,18 @@
           <li>Batting Average (How often can a team get on base/score?)</li>
       </ul>
       <br>
+      <h3>Want to visit the websites used for this model? Click on one of the images below!</h3>
+    <div>
+        <label class ="main-page"></label>
+        <a href = "https://rmacsports.org/sports/softball" target="_blank">
+        <img src="static/images/RMAC_Logo.png" alt="RMAC Logo" style ="width:200px; height:200px;">
+        </a>
+
+        <a href = "https://www.ncaa.com/sports/softball/d2" target="_blank">
+        <img src="static/images/NCAA_Logo.png" alt="NCAA Logo" style ="width:200px; height:200px;">
+        </a>
+    </div>
+
 
   </div>
 
@@ -176,6 +225,21 @@
             border-radius: 10px;
             display: none;">
   </div>
+      <div id="accuracy_output"
+           style="margin-top: 20px;
+            padding: 15px;
+            border: 2px solid #0E2095;
+            background-color: #F7F7FF;
+            border-radius: 10px;
+            display: none;">
+
+      </div>
+  </div>
+
+  <div id="history" class ="tabcontent">
+      <h1>View Previous Rankings</h1>
+      <h3>RMAC Conference Champions/Tournament Appearances</h3>
+      <p>Team:</p>
   </div>
 
 
@@ -258,8 +322,16 @@ tableHTML += `
         </tbody>
     </table>
 `;
+let accuracyHTML = `
+    <div style="margin-bottom: 15px;">
+        <h3>Model Accuracy</h3>
+        <p><strong>R² Score:</strong> ${data.r2.toFixed(3)}</p>
+        <p><strong>Mean Absolute Error:</strong> ${data.mae.toFixed(2)} places</p>
+        <em>Lower MAE = better. R² closer to 1.0 = better.</em>
+    </div>
+`;
 
-box.innerHTML = tableHTML;
+box.innerHTML = accuracyHTML+tableHTML;
 }
 
 </script>
@@ -290,3 +362,4 @@ async function loadDataset(event){
 
 </body>
 </html>
+
