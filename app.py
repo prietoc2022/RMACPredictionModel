@@ -87,7 +87,7 @@ def make_prediction():
     train_df = pd.concat(train_frames, ignore_index=True)
 
     # Features used for training
-    features = ['W', 'L', 'PCT_x', 'BA', 'FP', 'ERA']
+    features = ['RMAC_Wins', 'RMAC_Losses', 'PCT_x', 'BA', 'FP', 'ERA']
     features = [f for f in features if f in train_df.columns]  # remove missing features
 
     X_train = train_df[features].fillna(0)
