@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 
 app = Flask(__name__)
 
@@ -94,7 +94,13 @@ def make_prediction():
     y_train = train_df['Rank'].fillna(0)
 
     # Train model
-    model = LinearRegression()
+    model = GradientBoostingRegressor(
+         n_estimators=140,
+            learning_rate=0.05,
+            max_depth=3,
+            subsample=0.9,
+            random_state=42
+    )
     model.fit(X_train, y_train)
 #-----------------------------------------------------------------------------
     # Prediction on the most recent dataset
@@ -116,7 +122,8 @@ def make_prediction():
     # Print results
     print(f"MAE: {mae}")
     print(f"R2: {r2}")
-
+# Show training and test data in a graph
+    
     # output being sent back to javascript
     return jsonify({
         "teams": teams,
